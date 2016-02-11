@@ -89,7 +89,7 @@ public class GoogleHashCode2016 {
     
     public static double calculateOrderCost(ArrayList<Warehouse> mywhs, Order order)
     {
-        
+       
         
        return cost;
     }
