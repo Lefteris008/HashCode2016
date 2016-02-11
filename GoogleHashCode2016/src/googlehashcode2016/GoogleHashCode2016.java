@@ -26,13 +26,17 @@ public class GoogleHashCode2016 {
     private static int maxPayload;
     private static int numberOfProductTypes;
     private static int numberOfWarehouses;
+    private static int numberOfOrders;
     private static ArrayList<Integer> productWeights = new ArrayList<>();
     private static ArrayList<Warehouse> warehouses = new ArrayList<>();
+    private static ArrayList<Order> orders = new ArrayList<>();
 
     public static final void readFile(String filename) {
         try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
             int index = 0;
             int warehouseIndex = -1;
+            int orderIndex = -1;
+            int tempIndex = 0;
             String[] data;
             for(String line; (line = br.readLine()) != null; ) {
                 data = line.split(" ");
@@ -62,6 +66,26 @@ public class GoogleHashCode2016 {
                             Item item = new Item(i, Integer.parseInt(data[0]));
                             warehouses.get(warehouseIndex).getItemsStored().add(item);
                         }
+                    }
+                } else if (index == (numberOfWarehouses * 2 + 4)) {
+                    numberOfOrders = Integer.parseInt(data[0]);
+                } else {
+                    if(tempIndex == 0) {
+                        Order order = new Order();
+                        order.setRow(Integer.parseInt(data[0]));
+                        order.setColumn(Integer.parseInt(data[1]));
+                        orders.add(order);
+                        orderIndex++;
+                        tempIndex++;
+                    } else if (tempIndex == 1) {
+                        orders.get(orderIndex).setNumberOfOrderedProductItems(Integer.parseInt(data[0]));
+                        tempIndex++;
+                    } else {
+                        for(int i = 0; i < data.length; i++) {
+                            Item item = new Item(i, Integer.parseInt(data[0]));
+                            orders.get(orderIndex).getItemsOrdered().add(item);
+                        }
+                        tempIndex = 0;
                     }
                 }
             }
