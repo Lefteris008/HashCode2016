@@ -58,7 +58,10 @@ public class GoogleHashCode2016 {
                         warehouses.add(war);
                         warehouseIndex++;
                     } else {
-                        warehouses.get(warehouseIndex).
+                        for(int i = 0; i < data.length; i++) {
+                            Item item = new Item(i, Integer.parseInt(data[0]));
+                            warehouses.get(warehouseIndex).getItemsStored().add(item);
+                        }
                     }
                 }
             }
