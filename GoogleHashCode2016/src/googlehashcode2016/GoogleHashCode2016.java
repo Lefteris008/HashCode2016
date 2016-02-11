@@ -98,5 +98,21 @@ public class GoogleHashCode2016 {
         readFile(filename);
         System.out.println("");
     }
-
+    public static int getEuclidian(int row1,int col1, int row2, int col2)
+    {
+        double x = Math.pow((row1-row2), 2);
+        double y = Math.pow((col1-col2), 2);
+        double distance = Math.sqrt((x+y));
+        
+        int turns= (int)Math.ceil(distance);
+        return turns;
+       }
+    
+    public static double calculateOrderCost(ArrayList<Warehouse> mywhs, Order order)
+    {
+       
+        
+       return cost;
+    }
+    
 }
