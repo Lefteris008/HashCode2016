@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @author Lefteris Paraskevas
  */
 public class GoogleHashCode2016 {
-    
+
     private static int rows;
     private static int columns;
     private static int drones;
@@ -31,75 +31,72 @@ public class GoogleHashCode2016 {
     private static ArrayList<Warehouse> warehouses = new ArrayList<>();
     private static ArrayList<Order> orders = new ArrayList<>();
 
-    public static final void readFile(String filename) {
-        try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            int index = 0;
-            int warehouseIndex = -1;
-            int orderIndex = -1;
-            int tempIndex = 0;
+    public static final void readFile(String filename) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+           
             String[] data;
-            for(String line; (line = br.readLine()) != null; ) {
-                data = line.split(" ");
-                if(index == 0) {
-                    rows = Integer.parseInt(data[0]);
-                    columns = Integer.parseInt(data[1]);
-                    drones = Integer.parseInt(data[2]);
-                    turns = Integer.parseInt(data[3]);
-                    maxPayload = Integer.parseInt(data[4]);
-                } else if(index == 1) {
-                    numberOfProductTypes = Integer.parseInt(data[0]);
-                } else if(index == 2) {
-                    for(int i = 0; i < numberOfProductTypes; i++) {
-                        productWeights.add(Integer.parseInt(data[i]));
-                    }
-                } else if(index == 3) {
-                    numberOfWarehouses = Integer.parseInt(data[0]);
-                } else if(index > 3 && (index <= numberOfWarehouses * 2 + 3)) {
-                    if(index % numberOfWarehouses == 0) {
-                        Warehouse war = new Warehouse();
-                        war.setRow(Integer.parseInt(data[0]));
-                        war.setColumn(Integer.parseInt(data[1]));
-                        warehouses.add(war);
-                        warehouseIndex++;
-                    } else {
-                        for(int i = 0; i < data.length; i++) {
-                            Item item = new Item(i, Integer.parseInt(data[0]));
-                            warehouses.get(warehouseIndex).getItemsStored().add(item);
-                        }
-                    }
-                } else if (index == (numberOfWarehouses * 2 + 4)) {
-                    numberOfOrders = Integer.parseInt(data[0]);
-                } else {
-                    if(tempIndex == 0) {
-                        Order order = new Order();
-                        order.setRow(Integer.parseInt(data[0]));
-                        order.setColumn(Integer.parseInt(data[1]));
-                        orders.add(order);
-                        orderIndex++;
-                        tempIndex++;
-                    } else if (tempIndex == 1) {
-                        orders.get(orderIndex).setNumberOfOrderedProductItems(Integer.parseInt(data[0]));
-                        tempIndex++;
-                    } else {
-                        for(int i = 0; i < data.length; i++) {
-                            Item item = new Item(i, Integer.parseInt(data[0]));
-                            orders.get(orderIndex).getItemsOrdered().add(item);
-                        }
-                        tempIndex = 0;
-                    }
-                }
+            String line = br.readLine();
+            data = line.split(" ");
+            rows = Integer.parseInt(data[0]);
+            columns = Integer.parseInt(data[1]);
+            drones = Integer.parseInt(data[2]);
+            turns = Integer.parseInt(data[3]);
+            maxPayload = Integer.parseInt(data[4]);
+            line = br.readLine();
+            numberOfProductTypes = Integer.parseInt(line);
+            line = br.readLine();
+            data = line.split(" ");
+            for (int i = 0; i < numberOfProductTypes; i++) {
+                productWeights.add(Integer.parseInt(data[i]));
             }
-        } catch (FileNotFoundException e) {
-            Logger.getLogger(GoogleHashCode2016.class.getName()).log(Level.SEVERE, null, e);
-        } catch (IOException e) {
-            Logger.getLogger(GoogleHashCode2016.class.getName()).log(Level.SEVERE, null, e);
+            line = br.readLine();
+            numberOfWarehouses = Integer.parseInt(line);
+            for (int j = 0; j < numberOfWarehouses; j++) {
+                line = br.readLine();
+                data = line.split(" ");
+                Warehouse war = new Warehouse();
+                war.setRow(Integer.parseInt(data[0]));
+                war.setColumn(Integer.parseInt(data[1]));
+                
+                line = br.readLine();
+                data = line.split(" ");
+                for (int i = 0; i < data.length; i++) {
+                    Item item = new Item(i, Integer.parseInt(data[i]));
+                    war.getItemsStored().add(item);
+                }
+                warehouses.add(war);
+            }
+            line = br.readLine();
+            numberOfOrders = Integer.parseInt(line);
+            for (int j = 0; j < numberOfOrders; j++) {
+                Order order = new Order();
+                line = br.readLine();
+                data = line.split(" ");
+                order.setRow(Integer.parseInt(data[0]));
+                order.setColumn(Integer.parseInt(data[1]));
+
+                line = br.readLine();
+                order.setNumberOfOrderedProductItems(Integer.parseInt(line));
+                line = br.readLine();
+                data = line.split(" ");
+                for (int i = 0; i < data.length; i++) {
+                    Item item = new Item(i, Integer.parseInt(data[i]));
+                    order.getItemsOrdered().add(item);
+                }
+                orders.add(order);
+            }
+
         }
+
     }
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws IOException {
+        String filename = "C:\\redundancy.in";
+        readFile(filename);
+        System.out.println("");
     }
-    
+
 }
